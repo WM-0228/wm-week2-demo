@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangming.mapper.GoodsMapper">
+	<insert id="addGoods">
+		INSERT INTO goods VALUES
+		<foreach collection="list" item="l" separator=",">
+			(0,#{l.gname},#{l.price},#{l.sales})
+		</foreach>
+	</insert>
+	
+	<select id="getGoodsList" resultType="goods">
+		select * from goods
+		<where>
+			<if test="null != minPrice and minPrice != ''">
+				and price >= #{minPrice}
+			</if>
+			<if test="null != maxPrice and maxPrice != ''">
+				and price &lt;= #{maxPrice}
+			</if>
+			
+			<if test="null != minSales and minSales != ''">
+				and sales >= #{minSales}
+			</if>
+			<if test="null != maxSales and maxSales != ''">
+				and sales &lt;= #{maxSales}
+			</if>
+			
+		</where>
+			<if test="null != name and name != '' and null != order and order != ''">
+				order by ${name} ${order}
+			</if>
+	</select>
+</mapper>
